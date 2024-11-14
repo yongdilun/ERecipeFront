@@ -1,0 +1,279 @@
+.recipe-container {
+  padding: 20px;
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(370px, 1fr)); /* Increase min-width for wider cards */
+  gap: 10px; /* Space between cards */
+}
+
+.recipe-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  width: 350px;
+  height: 520px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.recipe-card h3 {
+  height: 2.5em; /* Adjust this value to fit two lines comfortably */
+  line-height: 1.25em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limits the title to two lines */
+  -webkit-box-orient: vertical;
+  font-size: 1.25em; /* Adjust as needed */
+  font-weight: bold;
+}
+
+
+.recipe-image {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  object-fit: cover; /* Ensure the image fits well */
+}
+
+.recipe-rating .star {
+  font-size: 14px; /* Adjust size if needed */
+  color: #FFD700; /* Gold color for all stars */
+  margin: 0 2px; /* Spacing between stars */
+  pointer-events: none; /* Disables hover interaction */
+}
+
+.full-star, .half-star, .empty-star {
+  color: #FFD700; /* Ensure all stars are set to gold color */
+}
+
+/* Remove any hover effects on stars */
+.recipe-rating .star:hover {
+  color: #FFD700; /* Ensures no change on hover */
+}
+
+.recipe-info {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.recipe-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Number of lines to display before truncating */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 3em; /* Adjust height based on font size to fit 2 lines */
+  margin-top: 8px;
+  color: #555; /* Customize color to match the design */
+}
+
+.view-recipe-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #b83232; /* Dark red, similar to example */
+  font-weight: bold;
+  text-align: left; /* Align text to the left */
+  font-size: 1.1rem; /* Increase font size */
+  text-decoration: none;
+  border: none;
+  background: none;
+  padding: 5px 0;
+  transition: color 0.3s, border-bottom 0.3s;
+  border-bottom: 1px solid transparent; /* Creates an underline effect */
+}
+
+.view-recipe-link:hover {
+  color: #8a2323; /* Slightly darker on hover */
+  border-bottom: 1px solid #b83232; /* Underline color matches the text */
+}
+
+.recipes-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0 2rem;
+  gap: 1rem;
+}
+
+.search-box {
+  flex: 0 1 300px;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border: 2px solid #e0e0e0;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+.sort-box {
+  min-width: 150px;
+}
+
+.sort-select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-size: 1.2rem;
+}
+
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .recipes-controls {
+    flex-direction: column;
+    padding: 0 1rem;
+  }
+
+  .search-box {
+    width: 100%;
+    max-width: none;
+  }
+
+  .sort-box {
+    width: 100%;
+  }
+}
+
+/* Add these new styles for the cuisine filter */
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+}
+
+.cuisine-box {
+  min-width: 150px;
+}
+
+.cuisine-select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cuisine-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+/* Update the media query for mobile responsiveness */
+@media (max-width: 768px) {
+  .filter-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .cuisine-box {
+    width: 100%;
+  }
+}
+
+.recipes-page {
+  background-color: var(--background-color);
+  min-height: 100vh;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  text-align: center;
+  padding: 4rem 2rem;
+  margin-bottom: 3rem;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  animation: fadeInUp 0.8s ease;
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  animation: fadeInUp 1s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Update existing container styles */
+.recipes-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-section p {
+    font-size: 1rem;
+  }
+}
