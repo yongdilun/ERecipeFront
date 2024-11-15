@@ -4,6 +4,8 @@ import axios from 'axios';
 import './AddRecipe.css';
 import Header from './Header';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 function EditRecipe() {
   const { recipeId } = useParams();
   const navigate = useNavigate();
@@ -27,12 +29,14 @@ function EditRecipe() {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/edit-recipe/${recipeId}`);
+        const response = await axios.get(`${API_BASE_URL}/api/edit-recipe/${recipeId}`);
         const { recipe, ingredients: recipeIngredients, steps } = response.data;
         
         setTitle(recipe.title);
         setDescription(recipe.description);
-        setCurrentImageUrl(recipe.image_url);
+        setCurrentImageUrl(recipe.image_url.startsWith('http') 
+          ? recipe.image_url 
+          : `${API_BASE_URL}${recipe.image_url}`);
         setServings(recipe.servings);
         setCookingTime(recipe.cooking_time);
         setPrepTime(recipe.prep_time);
@@ -45,10 +49,16 @@ function EditRecipe() {
         
         setInstructions(steps.map(step => ({
           step: step.description,
-          image: step.image_url
+          image: step.image_url.startsWith('http') 
+            ? step.image_url 
+            : `${API_BASE_URL}${step.image_url}`
         })));
         
-        setCurrentStepImages(steps.map(step => step.image_url));
+        setCurrentStepImages(steps.map(step => 
+          step.image_url.startsWith('http') 
+            ? step.image_url 
+            : `${API_BASE_URL}${step.image_url}`
+        ));
       } catch (error) {
         setError('Error fetching recipe details');
       }
@@ -100,7 +110,7 @@ function EditRecipe() {
       if (imageFile) {
         const formData = new FormData();
         formData.append('file', imageFile);
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/uploads/recipe`, formData);
+        const response = await axios.post(`${API_BASE_URL}/api/uploads/recipe`, formData);
         imageUrl = response.data.imageUrl;
       }
 
@@ -109,7 +119,7 @@ function EditRecipe() {
           if (!file) return currentStepImages[index] || null;
           const formData = new FormData();
           formData.append('file', file);
-          const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/uploads/recipestep`, formData);
+          const response = await axios.post(`${API_BASE_URL}/api/uploads/recipestep`, formData);
           return response.data.imageUrl;
         })
       );
@@ -132,7 +142,7 @@ function EditRecipe() {
         })),
       };
 
-      await axios.put(`${process.env.REACT_APP_API_URL}/api/edit-recipe/${recipeId}`, data);
+      await axios.put(`${API_BASE_URL}/api/edit-recipe/${recipeId}`, data);
       setSuccessMessage('Recipe updated successfully!');
       setTimeout(() => navigate(`/recipes/${recipeId}`), 2000);
     } catch (error) {
@@ -146,7 +156,7 @@ function EditRecipe() {
     if (window.confirm('Are you sure you want to delete this recipe? This action cannot be undone.')) {
       try {
         setLoadingImage(true);
-        await axios.delete(`${process.env.REACT_APP_API_URL}/api/edit-recipe/${recipeId}`);
+        await axios.delete(`${API_BASE_URL}/api/edit-recipe/${recipeId}`);
         setSuccessMessage('Recipe deleted successfully!');
         setTimeout(() => {
           navigate('/myrecipes');
@@ -206,12 +216,20 @@ function EditRecipe() {
                 <div className="form-group">
                   <label>Recipe Image:</label>
                   {currentImageUrl && (
-                    <img src={currentImageUrl} alt="Current Recipe" className="recipe-image-preview" />
+                    <img 
+                      src={currentImageUrl} 
+                      alt="Current Recipe" 
+                      className="recipe-image-preview" 
+                    />
                   )}
                   <input type="file" onChange={handleImageSelection} />
                   {loadingImage && <p>Uploading image...</p>}
                   {imageFile && (
-                    <img src={URL.createObjectURL(imageFile)} alt="New Recipe Preview" className="recipe-image-preview" />
+                    <img 
+                      src={URL.createObjectURL(imageFile)} 
+                      alt="New Recipe Preview" 
+                      className="recipe-image-preview" 
+                    />
                   )}
                 </div>
 
@@ -247,12 +265,20 @@ function EditRecipe() {
                         placeholder="Write instruction"
                       />
                       {currentStepImages[index] && (
-                        <img src={currentStepImages[index]} alt={`Current Step ${index + 1}`} className="step-image-preview" />
+                        <img 
+                          src={currentStepImages[index]} 
+                          alt={`Current Step ${index + 1}`} 
+                          className="step-image-preview" 
+                        />
                       )}
                       <input type="file" onChange={(e) => handleStepImageSelection(index, e)} />
                       {loadingImage && <p>Uploading image...</p>}
                       {stepImageFiles[index] && (
-                        <img src={URL.createObjectURL(stepImageFiles[index])} alt={`New Step ${index + 1}`} className="step-image-preview" />
+                        <img 
+                          src={URL.createObjectURL(stepImageFiles[index])} 
+                          alt={`New Step ${index + 1}`} 
+                          className="step-image-preview" 
+                        />
                       )}
                     </div>
                   ))}

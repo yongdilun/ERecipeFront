@@ -38,60 +38,76 @@ const Home = () => {
     fetchRecipes();
   }, []);
 
-  const RecipeCard = ({ recipe, type }) => (
-    <div className="recipe-card" onClick={() => navigate(`/recipes/${recipe._id}`)}>
-      <div className="recipe-image-container">
-        <img 
-          src={recipe.image_url.startsWith('http') 
-            ? recipe.image_url 
-            : `${API_BASE_URL}${recipe.image_url}`
-          } 
-          alt={recipe.title} 
-          className="recipe-image" 
-        />
-        <div className="recipe-overlay">
-          <button className="view-recipe-btn">
-            View Recipe <FaArrowRight className="arrow-icon" />
-          </button>
-        </div>
-      </div>
-      <div className="recipe-content">
-        <h3>{recipe.title}</h3>
-        <p className="recipe-description">{recipe.description}</p>
-        
-        <div className="recipe-info">
-          <span className="cooking-info">
-            <FaHourglassHalf className="icon" />
-            {recipe.prep_time}m prep
-          </span>
-          <span className="cooking-info">
-            <FaClock className="icon" />
-            {recipe.cooking_time}m cook
-          </span>
-          <span className="cooking-info">
-            <FaUtensils className="icon" />
-            {recipe.servings} servings
-          </span>
-        </div>
+  const RecipeCard = ({ recipe, type }) => {
+    // Format date helper function
+    const formatDate = (dateString) => {
+      if (!dateString) return 'No date';
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Invalid date';
+      
+      // Format date as "MM/DD/YYYY" or use any preferred format
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    };
 
-        <div className="recipe-meta">
-          <span className="recipe-author">By {recipe.author.username}</span>
-          {type === 'rated' && (
-            <span className="recipe-rating">
-              <FaStar className="icon star-icon" />
-              {recipe.averageRating?.toFixed(1) || 0}
+    return (
+      <div className="recipe-card" onClick={() => navigate(`/recipes/${recipe._id}`)}>
+        <div className="recipe-image-container">
+          <img 
+            src={recipe.image_url.startsWith('http') 
+              ? recipe.image_url 
+              : `${API_BASE_URL}${recipe.image_url}`
+            } 
+            alt={recipe.title} 
+            className="recipe-image" 
+          />
+          <div className="recipe-overlay">
+            <button className="view-recipe-btn">
+              View Recipe <FaArrowRight className="arrow-icon" />
+            </button>
+          </div>
+        </div>
+        <div className="recipe-content">
+          <h3>{recipe.title}</h3>
+          <p className="recipe-description">{recipe.description}</p>
+          
+          <div className="recipe-info">
+            <span className="cooking-info">
+              <FaHourglassHalf className="icon" />
+              {recipe.prep_time}m prep
             </span>
-          )}
-          {type === 'latest' && (
-            <span className="recipe-time">
-              <FaClock className="icon clock-icon" />
-              {new Date(recipe.createdAt).toLocaleDateString()}
+            <span className="cooking-info">
+              <FaClock className="icon" />
+              {recipe.cooking_time}m cook
             </span>
-          )}
+            <span className="cooking-info">
+              <FaUtensils className="icon" />
+              {recipe.servings} servings
+            </span>
+          </div>
+
+          <div className="recipe-meta">
+            <span className="recipe-author">By {recipe.author.username}</span>
+            {type === 'rated' && (
+              <span className="recipe-rating">
+                <FaStar className="icon star-icon" />
+                {recipe.averageRating?.toFixed(1) || 0}
+              </span>
+            )}
+            {type === 'latest' && (
+              <span className="recipe-time">
+                <FaClock className="icon clock-icon" />
+                {formatDate(recipe.created_at)}
+              </span>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const getVisibleRecipes = (recipeList, startIndex) => {
     return recipeList.slice(startIndex, startIndex + 4);
