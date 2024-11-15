@@ -5,6 +5,8 @@ import axios from 'axios';
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const Home = () => {
   const [recipes, setRecipes] = useState({
     latestRecipes: [],
@@ -17,7 +19,7 @@ const Home = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get('/api/home');
+        const response = await axios.get(`${API_BASE_URL}/api/home`);
         setRecipes(response.data.data);
       } catch (error) {
         console.error('Error fetching recipes:', error);
@@ -30,7 +32,7 @@ const Home = () => {
   const RecipeCard = ({ recipe, type }) => (
     <div className="recipe-card" onClick={() => navigate(`/recipes/${recipe._id}`)}>
       <div className="recipe-image-container">
-        <img src={recipe.imageUrl} alt={recipe.title} className="recipe-image" />
+        <img src={`${API_BASE_URL}${recipe.image_url}`} alt={recipe.title} className="recipe-image" />
         <div className="recipe-overlay">
           <button className="view-recipe-btn">
             View Recipe <FaArrowRight className="arrow-icon" />

@@ -5,6 +5,8 @@ import axios from 'axios';
 import './Recipes.css';
 import Header from './Header';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const Recipes = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [recipes, setRecipes] = useState([]);
@@ -18,7 +20,13 @@ const Recipes = () => {
   const fetchRecipes = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`/api/recipes?search=${searchTerm}&sortBy=${sortBy}&cuisine=${cuisine}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/recipes`, {
+        params: {
+          search: searchTerm,
+          sortBy: sortBy,
+          cuisine: cuisine
+        }
+      });
       if (Array.isArray(response.data)) {
         setRecipes(response.data);
       } else {
@@ -65,7 +73,7 @@ const Recipes = () => {
     <div className="recipe-card">
       <div className="recipe-image-container">
         <img 
-          src={recipe.image_url} 
+          src={`${API_BASE_URL}${recipe.image_url}`} 
           alt={recipe.title} 
           className="recipe-image" 
         />

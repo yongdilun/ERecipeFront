@@ -5,6 +5,8 @@ import axios from 'axios';
 import './MyRecipes.css';
 import Header from './Header';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const MyRecipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -55,7 +57,11 @@ const MyRecipes = () => {
   const RecipeCard = ({ recipe }) => (
     <div className="recipe-card">
       <div className="recipe-image-container">
-        <img src={recipe.image_url} alt={recipe.title} className="recipe-image" />
+        <img 
+          src={`${API_BASE_URL}${recipe.image_url}`} 
+          alt={recipe.title} 
+          className="recipe-image" 
+        />
         <div className="recipe-overlay">
           <div className="recipe-buttons">
             <Link to={`/recipes/${recipe._id}`} className="view-recipe-btn">
