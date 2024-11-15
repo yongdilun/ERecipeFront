@@ -19,10 +19,19 @@ const Home = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
+        console.log('Fetching from:', `${API_BASE_URL}/api/home`);
         const response = await axios.get(`${API_BASE_URL}/api/home`);
-        setRecipes(response.data.data);
+        console.log('Response:', response.data);
+        
+        if (response.data && response.data.data) {
+          setRecipes(response.data.data);
+        } else {
+          console.error('Invalid response format:', response.data);
+          setRecipes({ latestRecipes: [], topRatedRecipes: [] });
+        }
       } catch (error) {
-        console.error('Error fetching recipes:', error);
+        console.error('Error fetching recipes:', error.response || error);
+        setRecipes({ latestRecipes: [], topRatedRecipes: [] });
       }
     };
 
@@ -32,7 +41,14 @@ const Home = () => {
   const RecipeCard = ({ recipe, type }) => (
     <div className="recipe-card" onClick={() => navigate(`/recipes/${recipe._id}`)}>
       <div className="recipe-image-container">
-        <img src={`${API_BASE_URL}${recipe.image_url}`} alt={recipe.title} className="recipe-image" />
+        <img 
+          src={recipe.image_url.startsWith('http') 
+            ? recipe.image_url 
+            : `${API_BASE_URL}${recipe.image_url}`
+          } 
+          alt={recipe.title} 
+          className="recipe-image" 
+        />
         <div className="recipe-overlay">
           <button className="view-recipe-btn">
             View Recipe <FaArrowRight className="arrow-icon" />
