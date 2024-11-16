@@ -5,6 +5,8 @@ import { FaStar } from 'react-icons/fa';
 import Header from './Header';
 import './RecipeDetail.css';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const RecipeDetail = () => {
     const { recipeId } = useParams();
     const [recipe, setRecipe] = useState(null);
@@ -96,6 +98,12 @@ const RecipeDetail = () => {
         }
     };
 
+    const getImageUrl = (url) => {
+        if (!url) return '';
+        if (url.startsWith('http')) return url;
+        return `${API_BASE_URL}${url}`;
+    };
+
     if (!recipe) return <p>Loading...</p>;
 
     return (
@@ -139,7 +147,7 @@ const RecipeDetail = () => {
                     </div>
                     <div className="recipe-detail-image-wrapper">
                         <img
-                            src={`${process.env.REACT_APP_API_URL}${recipe.image_url}`}
+                            src={getImageUrl(recipe.image_url)}
                             alt={recipe.title}
                             className="recipe-detail-image"
                         />
@@ -160,7 +168,13 @@ const RecipeDetail = () => {
                     {steps.map(step => (
                         <li key={step.step_number}>
                             <p>{step.description}</p>
-                            {step.image_url && <img src={`${process.env.REACT_APP_API_URL}${step.image_url}`} alt={`Step ${step.step_number}`} className="recipe-step-image" />}
+                            {step.image_url && 
+                                <img 
+                                    src={getImageUrl(step.image_url)} 
+                                    alt={`Step ${step.step_number}`} 
+                                    className="recipe-step-image" 
+                                />
+                            }
                         </li>
                     ))}
                 </ol>

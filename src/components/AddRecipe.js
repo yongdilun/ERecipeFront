@@ -4,6 +4,8 @@ import axios from 'axios';
 import './AddRecipe.css';
 import Header from './Header';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 function AddRecipe() {
   const [title, setTitle] = useState('');
   const [imageFile, setImageFile] = useState(null);
@@ -99,7 +101,7 @@ function AddRecipe() {
         try {
           const formData = new FormData();
           formData.append('file', imageFile);
-          const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/uploads/recipe`, formData, {
+          const response = await axios.post(`${API_BASE_URL}/api/uploads/recipe`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
           });
           imageUrl = response.data.imageUrl;
@@ -116,7 +118,7 @@ function AddRecipe() {
           try {
             const formData = new FormData();
             formData.append('file', file);
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/uploads/recipestep`, formData, {
+            const response = await axios.post(`${API_BASE_URL}/api/uploads/recipestep`, formData, {
               headers: { 'Content-Type': 'multipart/form-data' },
             });
             return response.data.imageUrl;
@@ -147,7 +149,7 @@ function AddRecipe() {
         })),
       };
 
-      const recipeResponse = await axios.post(`${process.env.REACT_APP_API_URL}/api/addrecipes/add`, data);
+      const recipeResponse = await axios.post(`${API_BASE_URL}/api/addrecipes/add`, data);
       console.log('Recipe created successfully:', recipeResponse.data.message);
       setRecipeId(recipeResponse.data.recipeId);
       setSuccessMessage('Recipe created successfully!');

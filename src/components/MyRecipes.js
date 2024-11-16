@@ -54,11 +54,17 @@ const MyRecipes = () => {
     fetchMyRecipes();
   }, [fetchMyRecipes]);
 
+  const getImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `${API_BASE_URL}${url}`;
+  };
+
   const RecipeCard = ({ recipe }) => (
     <div className="recipe-card">
       <div className="recipe-image-container">
         <img 
-          src={`${API_BASE_URL}${recipe.image_url}`} 
+          src={getImageUrl(recipe.image_url)} 
           alt={recipe.title} 
           className="recipe-image" 
         />

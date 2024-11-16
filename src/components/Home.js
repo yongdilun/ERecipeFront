@@ -53,14 +53,17 @@ const Home = () => {
       });
     };
 
+    const getImageUrl = (url) => {
+      if (!url) return '';
+      if (url.startsWith('http')) return url;
+      return `${API_BASE_URL}${url}`;
+    };
+
     return (
       <div className="recipe-card" onClick={() => navigate(`/recipes/${recipe._id}`)}>
         <div className="recipe-image-container">
           <img 
-            src={recipe.image_url.startsWith('http') 
-              ? recipe.image_url 
-              : `${API_BASE_URL}${recipe.image_url}`
-            } 
+            src={getImageUrl(recipe.image_url)} 
             alt={recipe.title} 
             className="recipe-image" 
           />

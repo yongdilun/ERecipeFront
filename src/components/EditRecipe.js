@@ -26,6 +26,12 @@ function EditRecipe() {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
+  const getImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `${API_BASE_URL}${url}`;
+  };
+
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
@@ -34,9 +40,7 @@ function EditRecipe() {
         
         setTitle(recipe.title);
         setDescription(recipe.description);
-        setCurrentImageUrl(recipe.image_url.startsWith('http') 
-          ? recipe.image_url 
-          : `${API_BASE_URL}${recipe.image_url}`);
+        setCurrentImageUrl(getImageUrl(recipe.image_url));
         setServings(recipe.servings);
         setCookingTime(recipe.cooking_time);
         setPrepTime(recipe.prep_time);
@@ -49,16 +53,10 @@ function EditRecipe() {
         
         setInstructions(steps.map(step => ({
           step: step.description,
-          image: step.image_url.startsWith('http') 
-            ? step.image_url 
-            : `${API_BASE_URL}${step.image_url}`
+          image: getImageUrl(step.image_url)
         })));
         
-        setCurrentStepImages(steps.map(step => 
-          step.image_url.startsWith('http') 
-            ? step.image_url 
-            : `${API_BASE_URL}${step.image_url}`
-        ));
+        setCurrentStepImages(steps.map(step => getImageUrl(step.image_url)));
       } catch (error) {
         setError('Error fetching recipe details');
       }
