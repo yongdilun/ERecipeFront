@@ -21,6 +21,7 @@ function AddRecipe() {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [recipeId, setRecipeId] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate
 
   const handleImageSelection = (event) => {
@@ -77,12 +78,16 @@ function AddRecipe() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return; // Prevent double submission
+    
+    setIsSubmitting(true);
     setLoadingImage(true);
     setError('');
 
     if (!title || !description || !servings || !cookingTime || !prepTime || !cuisine) {
       setError("Please fill out all required fields.");
       setLoadingImage(false);
+      setIsSubmitting(false);
       return;
     }
 
@@ -93,6 +98,7 @@ function AddRecipe() {
       if (!userId) {
         setError("User ID not available. Please log in again.");
         setLoadingImage(false);
+        setIsSubmitting(false);
         return;
       }
 
@@ -108,6 +114,7 @@ function AddRecipe() {
         } catch (uploadError) {
           setError("Failed to upload recipe image. Please try again.");
           setLoadingImage(false);
+          setIsSubmitting(false);
           return;
         }
       }
@@ -125,6 +132,7 @@ function AddRecipe() {
           } catch {
             setError("Failed to upload one or more step images. Please try again.");
             setLoadingImage(false);
+            setIsSubmitting(false);
             throw new Error("Step image upload failed.");
           }
         })
@@ -150,10 +158,11 @@ function AddRecipe() {
       };
 
       const recipeResponse = await axios.post(`${API_BASE_URL}/api/addrecipes/add`, data);
-      console.log('Recipe created successfully:', recipeResponse.data.message);
+      console.log('Recipe created successfully:', recipeResponse.data);
       setRecipeId(recipeResponse.data.recipeId);
       setSuccessMessage('Recipe created successfully!');
     } catch (error) {
+      console.error('Recipe creation error:', error);
       if (error.response) {
         const status = error.response.status;
         if (status === 400) {
@@ -168,6 +177,7 @@ function AddRecipe() {
       }
     } finally {
       setLoadingImage(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -190,31 +200,50 @@ function AddRecipe() {
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Recipe Title:</label>
+              <div className="form-group required">
+                <label>Recipe Title</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Enter recipe title"
+                  disabled={isSubmitting}
                 />
               </div>
-              <div className="form-group">
-                <label>Recipe Description:</label>
+
+              <div className="form-group required">
+                <label>Recipe Description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Enter recipe description"
+                  disabled={isSubmitting}
                 />
               </div>
+
               <div className="form-group">
-                <label>Recipe Image:</label>
-                <input type="file" onChange={handleImageSelection} />
-                {loadingImage && <p>Uploading image...</p>}
-                {imageFile && <img src={URL.createObjectURL(imageFile)} alt="Recipe Preview" className="recipe-image-preview" />}
+                <label>Recipe Image</label>
+                <input 
+                  type="file" 
+                  onChange={handleImageSelection} 
+                  disabled={isSubmitting}
+                />
+                {loadingImage && (
+                  <div className="image-loading">
+                    Uploading image...
+                  </div>
+                )}
+                {imageFile && (
+                  <img 
+                    src={URL.createObjectURL(imageFile)} 
+                    alt="Recipe Preview" 
+                    className="recipe-image-preview" 
+                  />
+                )}
               </div>
-              <div className="form-group">
-                <label>Ingredients:</label>
+
+              <div className="form-group required">
+                <label>Ingredients</label>
                 {ingredients.map((ingredient, index) => (
                   <div key={index} className="ingredient-group">
                     <input
@@ -222,19 +251,28 @@ function AddRecipe() {
                       value={ingredient.name}
                       onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}
                       placeholder="Enter ingredient"
+                      disabled={isSubmitting}
                     />
                     <input
                       type="text"
                       value={ingredient.quantity}
                       onChange={(e) => handleIngredientChange(index, 'quantity', e.target.value)}
                       placeholder="Quantity"
+                      disabled={isSubmitting}
                     />
                   </div>
                 ))}
-                <button type="button" onClick={handleAddIngredient}>+ Add Ingredient</button>
+                <button 
+                  type="button" 
+                  onClick={handleAddIngredient}
+                  disabled={isSubmitting}
+                >
+                  + Add Ingredient
+                </button>
               </div>
-              <div className="form-group">
-                <label>Instructions:</label>
+
+              <div className="form-group required">
+                <label>Instructions</label>
                 {instructions.map((instruction, index) => (
                   <div key={index} className="instruction-step">
                     <label>Step {index + 1}</label>
@@ -242,44 +280,79 @@ function AddRecipe() {
                       value={instruction.step}
                       onChange={(e) => handleInstructionChange(index, 'step', e.target.value)}
                       placeholder="Write instruction"
+                      disabled={isSubmitting}
                     />
-                    <input type="file" onChange={(e) => handleStepImageSelection(index, e)} />
-                    {loadingImage && <p>Uploading image...</p>}
-                    {stepImageFiles[index] && <img src={URL.createObjectURL(stepImageFiles[index])} alt="Step Preview" className="step-image-preview" />}
+                    <input 
+                      type="file" 
+                      onChange={(e) => handleStepImageSelection(index, e)}
+                      disabled={isSubmitting}
+                    />
+                    {loadingImage && (
+                      <div className="image-loading">
+                        Uploading image...
+                      </div>
+                    )}
+                    {stepImageFiles[index] && (
+                      <img 
+                        src={URL.createObjectURL(stepImageFiles[index])} 
+                        alt={`Step ${index + 1}`} 
+                        className="step-image-preview" 
+                      />
+                    )}
                   </div>
                 ))}
-                <button type="button" onClick={handleAddInstruction}>+ Add Step</button>
+                <button 
+                  type="button" 
+                  onClick={handleAddInstruction}
+                  disabled={isSubmitting}
+                >
+                  + Add Step
+                </button>
               </div>
-              <div className="form-group">
-                <label>Servings:</label>
+
+              <div className="form-group required">
+                <label>Servings</label>
                 <input
-                  type="text"
+                  type="number"
                   value={servings}
                   onChange={(e) => setServings(e.target.value)}
                   placeholder="Enter servings"
+                  disabled={isSubmitting}
+                  min="1"
                 />
               </div>
-              <div className="form-group">
-                <label>Cooking Time (in minutes):</label>
+
+              <div className="form-group required">
+                <label>Cooking Time (in minutes)</label>
                 <input
-                  type="text"
+                  type="number"
                   value={cookingTime}
                   onChange={(e) => setCookingTime(e.target.value)}
                   placeholder="Enter cooking time"
+                  disabled={isSubmitting}
+                  min="1"
                 />
               </div>
-              <div className="form-group">
-                <label>Prep Time (in minutes):</label>
+
+              <div className="form-group required">
+                <label>Prep Time (in minutes)</label>
                 <input
-                  type="text"
+                  type="number"
                   value={prepTime}
                   onChange={(e) => setPrepTime(e.target.value)}
                   placeholder="Enter prep time"
+                  disabled={isSubmitting}
+                  min="1"
                 />
               </div>
-              <div className="form-group">
-                <label>Cuisine:</label>
-                <select value={cuisine} onChange={(e) => setCuisine(e.target.value)}>
+
+              <div className="form-group required">
+                <label>Cuisine</label>
+                <select 
+                  value={cuisine} 
+                  onChange={(e) => setCuisine(e.target.value)}
+                  disabled={isSubmitting}
+                >
                   <option value="">Select cuisine</option>
                   <option value="Italian">Italian</option>
                   <option value="Mexican">Mexican</option>
@@ -287,8 +360,16 @@ function AddRecipe() {
                   <option value="American">American</option>
                 </select>
               </div>
+
               {error && <p className="error-message">{error}</p>}
-              <button type="submit">Create Recipe</button>
+              
+              <button 
+                type="submit" 
+                disabled={isSubmitting}
+                className={isSubmitting ? 'button-submitting' : ''}
+              >
+                {isSubmitting ? 'Creating Recipe...' : 'Create Recipe'}
+              </button>
             </form>
           )}
         </div>

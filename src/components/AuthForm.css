@@ -135,3 +135,50 @@
   font-weight: bold;
   margin-bottom: 1rem;
 }
+
+/* Disabled state for inputs and buttons */
+.auth-form-container input:disabled,
+.auth-form-container button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Loading state for buttons */
+.auth-form-container button.loading {
+  position: relative;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.auth-form-container button.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin: -10px 0 0 -10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error message styles */
+.auth-form-container .error-message {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+}

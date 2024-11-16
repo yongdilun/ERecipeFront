@@ -25,6 +25,7 @@ function EditRecipe() {
   const [loadingImage, setLoadingImage] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const getImageUrl = (url) => {
     if (!url) return '';
@@ -100,6 +101,9 @@ function EditRecipe() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
     setLoadingImage(true);
     setError('');
 
@@ -147,12 +151,16 @@ function EditRecipe() {
       setError('Error updating recipe. Please try again.');
     } finally {
       setLoadingImage(false);
+      setIsSubmitting(false);
     }
   };
 
   const handleDelete = async () => {
+    if (isSubmitting) return;
+    
     if (window.confirm('Are you sure you want to delete this recipe? This action cannot be undone.')) {
       try {
+        setIsSubmitting(true);
         setLoadingImage(true);
         await axios.delete(`${API_BASE_URL}/api/edit-recipe/${recipeId}`);
         setSuccessMessage('Recipe deleted successfully!');
@@ -164,6 +172,7 @@ function EditRecipe() {
         setError('Error deleting recipe. Please try again.');
       } finally {
         setLoadingImage(false);
+        setIsSubmitting(false);
       }
     }
   };
@@ -185,10 +194,10 @@ function EditRecipe() {
                 <button 
                   type="button" 
                   onClick={handleDelete}
-                  className="delete-recipe-btn"
-                  disabled={loadingImage}
+                  className={`delete-recipe-btn ${isSubmitting ? 'button-submitting' : ''}`}
+                  disabled={isSubmitting}
                 >
-                  {loadingImage ? 'Deleting...' : 'Delete Recipe'}
+                  {isSubmitting ? 'Deleting...' : 'Delete Recipe'}
                 </button>
               </div>
               <form onSubmit={handleSubmit}>
@@ -324,7 +333,13 @@ function EditRecipe() {
                   </select>
                 </div>
 
-                <button type="submit">Update Recipe</button>
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className={isSubmitting ? 'button-submitting' : ''}
+                >
+                  {isSubmitting ? 'Updating Recipe...' : 'Update Recipe'}
+                </button>
               </form>
             </>
           )}
