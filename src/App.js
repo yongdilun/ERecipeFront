@@ -12,6 +12,17 @@ import MyRecipes from './components/MyRecipes';
 import EditRecipe from './components/EditRecipe';
 import AboutUs from './components/AboutUs';
 
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const isAuthenticated = localStorage.getItem('token') && localStorage.getItem('userId');
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
+
 function App() {
   return (
     <Router>
@@ -19,13 +30,48 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/addrecipe" element={<AddRecipe />} />
-        <Route path="/profile" element={<Profile />} /> 
-        <Route path="/recipes" element={<Recipes />} /> 
+        <Route 
+          path="/addrecipe" 
+          element={
+            <ProtectedRoute>
+              <AddRecipe />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } 
+        />
+        <Route path="/recipes" element={<Recipes />} />
         <Route path="/recipes/:recipeId" element={<RecipeDetail />} />
-        <Route path="/change-password" element={<ChangePassword />} />
-        <Route path="/myrecipes" element={<MyRecipes />} />
-        <Route path="/edit-recipe/:recipeId" element={<EditRecipe />} />
+        <Route 
+          path="/change-password" 
+          element={
+            <ProtectedRoute>
+              <ChangePassword />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/myrecipes" 
+          element={
+            <ProtectedRoute>
+              <MyRecipes />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/edit-recipe/:recipeId" 
+          element={
+            <ProtectedRoute>
+              <EditRecipe />
+            </ProtectedRoute>
+          } 
+        />
         <Route path="/about" element={<AboutUs />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

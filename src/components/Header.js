@@ -52,8 +52,12 @@ const Header = () => {
         <Link to="/">Home</Link>
         <Link to="/recipes">Recipes</Link>
         <Link to="/about">About Us</Link>
-        {username && <Link to="/myrecipes">My Recipes</Link>}
-        <Link to="/addrecipe" className="share-recipe-link">Add Recipe</Link>
+        {username && (
+          <>
+            <Link to="/myrecipes">My Recipes</Link>
+            <Link to="/addrecipe" className="share-recipe-link">Add Recipe</Link>
+          </>
+        )}
         
         {username ? (
           <Link to="/profile" className="username-display">Welcome, {username}</Link>
