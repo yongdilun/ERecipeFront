@@ -11,12 +11,28 @@ import ChangePassword from './components/ChangePassword';
 import MyRecipes from './components/MyRecipes';
 import EditRecipe from './components/EditRecipe';
 import AboutUs from './components/AboutUs';
+import AdminDashboard from './components/AdminDashboard';
+import UserOverview from './components/UserOverview';
+import RecipeOverview from './components/RecipeOverview';
+import ManageRecipe from './components/ManageRecipe';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('token') && localStorage.getItem('userId');
   
   if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
+
+// Admin Protected Route Component
+const AdminProtectedRoute = ({ children }) => {
+  const isAuthenticated = localStorage.getItem('token') && localStorage.getItem('userId');
+  const isAdmin = localStorage.getItem('role') === 'admin';
+  
+  if (!isAuthenticated || !isAdmin) {
     return <Navigate to="/login" replace />;
   }
 
@@ -73,6 +89,46 @@ function App() {
           } 
         />
         <Route path="/about" element={<AboutUs />} />
+        <Route 
+          path="/admin/dashboard" 
+          element={
+            <AdminProtectedRoute>
+              <AdminDashboard />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/users" 
+          element={
+            <AdminProtectedRoute>
+              <UserOverview />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/recipes" 
+          element={
+            <AdminProtectedRoute>
+              <RecipeOverview />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/recipes/:recipeId/manage" 
+          element={
+            <AdminProtectedRoute>
+              <ManageRecipe />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/recipes/:recipeId/edit" 
+          element={
+            <AdminProtectedRoute>
+              <EditRecipe />
+            </AdminProtectedRoute>
+          } 
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

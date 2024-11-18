@@ -19,9 +19,16 @@ function Login() {
       localStorage.setItem("username", res.data.user.username);
       localStorage.setItem("userId", res.data.user.id);
       localStorage.setItem("email", res.data.user.email);
+      localStorage.setItem("role", res.data.user.role);
 
       setMessage("Login successful");
-      navigate('/'); // Redirect to home page on successful login
+      
+      // Redirect based on role
+      if (res.data.user.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setMessage(err.response?.data?.message || "Login failed");
     }
