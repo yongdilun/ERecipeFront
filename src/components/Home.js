@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
-import { FaStar, FaClock, FaUtensils, FaHourglassHalf, FaArrowRight, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaStar, FaClock, FaUtensils, FaHourglassHalf, FaArrowRight, FaChevronLeft, FaChevronRight, FaHeart } from 'react-icons/fa';
 import axios from 'axios';
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
@@ -39,6 +39,53 @@ const Home = () => {
   }, []);
 
   const RecipeCard = ({ recipe, type }) => {
+    const [isFavorited, setIsFavorited] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      const checkFavoriteStatus = async () => {
+        try {
+          const userId = localStorage.getItem('userId');
+          if (!userId) return;
+
+          const response = await axios.get(
+            `${API_BASE_URL}/api/favorites/check/${recipe._id}`,
+            { params: { userId } }
+          );
+          setIsFavorited(response.data.isFavorited);
+        } catch (error) {
+          console.error('Error checking favorite status:', error);
+        }
+      };
+
+      checkFavoriteStatus();
+    }, [recipe._id]);
+
+    const handleFavoriteClick = async (e) => {
+      e.stopPropagation(); // Prevent card click event
+      try {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          navigate('/login');
+          return;
+        }
+
+        if (isFavorited) {
+          await axios.delete(`${API_BASE_URL}/api/favorites/remove`, {
+            data: { user_id: userId, recipe_id: recipe._id }
+          });
+        } else {
+          await axios.post(`${API_BASE_URL}/api/favorites/add`, {
+            user_id: userId,
+            recipe_id: recipe._id
+          });
+        }
+        setIsFavorited(!isFavorited);
+      } catch (error) {
+        console.error('Error toggling favorite:', error);
+      }
+    };
+
     // Format date helper function
     const formatDate = (dateString) => {
       if (!dateString) return 'No date';
@@ -72,6 +119,12 @@ const Home = () => {
               View Recipe <FaArrowRight className="arrow-icon" />
             </button>
           </div>
+          <button 
+            onClick={handleFavoriteClick}
+            className={`favorite-btn ${isFavorited ? 'favorited' : ''}`}
+          >
+            <FaHeart />
+          </button>
         </div>
         <div className="recipe-content">
           <h3>{recipe.title}</h3>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaStar } from 'react-icons/fa';
+import { FaStar, FaHeart } from 'react-icons/fa';
 import Header from './Header';
 import './RecipeDetail.css';
 
@@ -20,6 +20,9 @@ const RecipeDetail = () => {
     const [hasRated, setHasRated] = useState(false);
     const [totalRatings, setTotalRatings] = useState(0);
     const [totalComments, setTotalComments] = useState(0);
+    const [isFavorited, setIsFavorited] = useState(false);
+
+    const navigate = useNavigate();
 
     const userId = localStorage.getItem('userId'); // Check if user is logged in
 
@@ -55,6 +58,25 @@ const RecipeDetail = () => {
 
     useEffect(() => {
         fetchRecipe();
+    }, [recipeId]);
+
+    useEffect(() => {
+        const checkFavoriteStatus = async () => {
+            try {
+                const userId = localStorage.getItem('userId');
+                if (!userId) return;
+
+                const response = await axios.get(
+                    `${API_BASE_URL}/api/favorites/check/${recipeId}`,
+                    { params: { userId } }
+                );
+                setIsFavorited(response.data.isFavorited);
+            } catch (error) {
+                console.error('Error checking favorite status:', error);
+            }
+        };
+
+        checkFavoriteStatus();
     }, [recipeId]);
 
     const handleRatingSubmit = async () => {
@@ -98,6 +120,30 @@ const RecipeDetail = () => {
         }
     };
 
+    const handleFavoriteClick = async () => {
+        try {
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                navigate('/login');
+                return;
+            }
+
+            if (isFavorited) {
+                await axios.delete(`${API_BASE_URL}/api/favorites/remove`, {
+                    data: { user_id: userId, recipe_id: recipeId }
+                });
+            } else {
+                await axios.post(`${API_BASE_URL}/api/favorites/add`, {
+                    user_id: userId,
+                    recipe_id: recipeId
+                });
+            }
+            setIsFavorited(!isFavorited);
+        } catch (error) {
+            console.error('Error toggling favorite:', error);
+        }
+    };
+
     const getImageUrl = (url) => {
         if (!url) return '';
         if (url.startsWith('http')) return url;
@@ -112,7 +158,15 @@ const RecipeDetail = () => {
             <div className="recipe-detail-container">
                 <div className="recipe-detail-content">
                     <div className="recipe-detail-info">
-                        <h1>{recipe.title}</h1>
+                        <div className="recipe-header">
+                            <h1>{recipe.title}</h1>
+                            <button 
+                                onClick={handleFavoriteClick}
+                                className={`favorite-btn ${isFavorited ? 'favorited' : ''}`}
+                            >
+                                <FaHeart />
+                            </button>
+                        </div>
                         <p>Average Rating: {Number.isFinite(averageRating) ? averageRating.toFixed(1) : 'N/A'} / 5 ({totalRatings} ratings)</p>
 
                         <div className="rating-input">

@@ -422,3 +422,59 @@
     transform: scale(1);
   }
 }
+
+/* Add these styles to your existing Home.css */
+
+.recipe-image-container {
+  position: relative;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 2;
+  font-size: 1.2rem;
+  color: #ccc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.favorite-btn.favorited {
+  color: #ff6b6b;
+}
+
+.favorite-btn:focus {
+  outline: none;
+}
+
+/* Add animation for favorite button */
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.favorite-btn.favorited {
+  animation: heartBeat 0.3s ease-in-out;
+}
