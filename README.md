@@ -1,71 +1,173 @@
-# Getting Started with Create React App
+# ERecipeHub Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based frontend for the ERecipeHub recipe sharing platform.
+
+## Features
+
+- User Authentication
+  - Login/Signup
+  - Password Change
+  - Profile Management
+- Recipe Management
+  - Create New Recipes
+  - Edit Existing Recipes
+  - Delete Recipes
+  - View Recipe Details
+- Recipe Interactions
+  - Rate Recipes
+  - Comment on Recipes
+  - Favorite Recipes
+- Recipe Discovery
+  - Search Recipes
+  - Filter by Cuisine
+  - Sort by Various Criteria
+  - View Latest Recipes
+  - View Top-Rated Recipes
+- Responsive Design
+  - Mobile-Friendly Interface
+  - Adaptive Layout
+
+## Tech Stack
+
+- **React** - Frontend Framework
+- **React Router** - Client-side Routing
+- **Axios** - HTTP Client
+- **React Icons** - Icon Components
+- **Font Awesome** - Icon Library
+- **CSS3** - Styling
+
+## Project Structure
+
+```
+frontend/
+├── public/
+│   ├── images/
+│   ├── _redirects
+│   └── index.html
+├── src/
+│   ├── components/
+│   │   ├── AddRecipe.js
+│   │   ├── EditRecipe.js
+│   │   ├── Home.js
+│   │   ├── Login.js
+│   │   ├── MyRecipes.js
+│   │   ├── Profile.js
+│   │   ├── RecipeDetail.js
+│   │   ├── Recipes.js
+│   │   └── Signup.js
+│   ├── App.js
+│   └── index.js
+├── .env.development
+└── .env.production
+```
+
+## Environment Variables
+
+### Development (.env.development)
+```env
+REACT_APP_API_URL=http://localhost:10000
+```
+
+### Production (.env.production)
+```env
+REACT_APP_API_URL=https://erecipehubback.onrender.com
+```
 
 ## Available Scripts
 
-In the project directory, you can run:
-
 ### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Runs the app in development mode
+- Opens [http://localhost:3000](http://localhost:3000)
+- Hot reloads on changes
 
 ### `npm run build`
+- Builds the app for production
+- Outputs to the `build` folder
+- Optimizes build for best performance
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### `npm test`
+- Launches the test runner
+- Runs in interactive watch mode
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/ERecipeFront.git
+cd ERecipeFront
+```
 
-### `npm run eject`
+2. Install dependencies:
+```bash
+npm install
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Create environment files:
+- Copy `.env.example` to `.env.development` for local development
+- Copy `.env.example` to `.env.production` for production
+- Fill in the appropriate values
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Start the development server:
+```bash
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Deployment
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The application is configured for deployment on Render:
 
-## Learn More
+1. Build Configuration:
+```yaml
+services:
+  - type: web
+    name: erecipehub
+    env: static
+    buildCommand: npm run build
+    staticPublishPath: ./build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. Routing Configuration:
+- `static.json` for static file serving
+- `_redirects` for client-side routing support
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Dependencies
 
-### Code Splitting
+- "@fortawesome/fontawesome-svg-core": "^6.6.0"
+- "@fortawesome/free-regular-svg-icons": "^6.6.0"
+- "@fortawesome/free-solid-svg-icons": "^6.6.0"
+- "@fortawesome/react-fontawesome": "^0.2.2"
+- "@testing-library/jest-dom": "^5.17.0"
+- "@testing-library/react": "^13.4.0"
+- "@testing-library/user-event": "^13.5.0"
+- "axios": "^1.7.7"
+- "react": "^18.3.1"
+- "react-dom": "^18.3.1"
+- "react-icons": "^5.3.0"
+- "react-router-dom": "^6.28.0"
+- "react-scripts": "^5.0.1"
+- "web-vitals": "^2.1.4"
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Browser Support
 
-### Analyzing the Bundle Size
+```json
+"browserslist": {
+  "production": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
+  "development": [
+    "last 1 chrome version",
+    "last 1 firefox version",
+    "last 1 safari version"
+  ]
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Contributing
 
-### Making a Progressive Web App
+Feel free to contribute to this project. Fork the repository, make your changes, and submit a pull request.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## License
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-"# ERecipeFront" 
+This project is licensed under the MIT License. 
