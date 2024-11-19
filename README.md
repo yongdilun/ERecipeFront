@@ -112,8 +112,8 @@ REACT_APP_API_URL=https://erecipehubback.onrender.com
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/ERecipeFront.git
-cd ERecipeFront
+git clone https://github.com/yourusername/ERecipeHub.git
+cd ERecipeHub/frontend
 ```
 
 2. Install dependencies:
@@ -199,3 +199,63 @@ Feel free to contribute to this project. Fork the repository, make your changes,
 ## License
 
 This project is licensed under the MIT License. 
+
+## How to Run Locally
+
+1. Prerequisites:
+   - Node.js (v18 or higher)
+   - Git
+   - Backend server running (see backend setup)
+
+2. Clone the Repository:
+   ```bash
+   git clone https://github.com/yourusername/ERecipeHub.git
+   cd ERecipeHub/frontend
+   ```
+
+3. Install Dependencies:
+   ```bash
+   npm install
+   ```
+
+4. Set Up Environment Variables:
+   - Create `.env.development` file in the root directory
+   ```env
+   REACT_APP_API_URL=http://localhost:10000
+   ```
+
+5. Start the Development Server:
+   ```bash
+   npm start
+   ```
+   - This will open http://localhost:3000 in your browser
+   - The page will reload when you make changes
+   - Any lint errors will appear in the console
+
+6. Build for Production (Optional):
+   ```bash
+   npm run build
+   ```
+
+7. Common Issues:
+   - Port 3000 already in use: 
+     - React will automatically suggest using another port
+     - Type 'Y' to accept
+   - API connection failed:
+     - Ensure backend server is running
+     - Check REACT_APP_API_URL in .env.development
+   - Images not loading:
+     - Verify backend server is running
+     - Check image paths in backend public/images directory
+
+8. Development Tips:
+   - Use Chrome DevTools for debugging
+   - Enable React Developer Tools extension
+   - Check console for errors and warnings
+   - Use Network tab to monitor API calls
+
+9. Testing the Admin Interface:
+   - Create a user account
+   - Use MongoDB Compass to change user role to 'admin'
+   - Log in with admin credentials
+   - Access admin dashboard at /admin/dashboard

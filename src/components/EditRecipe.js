@@ -108,50 +108,53 @@ function EditRecipe() {
     setError('');
 
     try {
-      let imageUrl = currentImageUrl;
-      if (imageFile) {
-        const formData = new FormData();
-        formData.append('file', imageFile);
-        const response = await axios.post(`${API_BASE_URL}/api/uploads/recipe`, formData);
-        imageUrl = response.data.imageUrl;
-      }
+        let imageUrl = currentImageUrl;
+        if (imageFile) {
+            const formData = new FormData();
+            formData.append('file', imageFile);
+            const response = await axios.post(`${API_BASE_URL}/api/uploads/recipe`, formData);
+            imageUrl = response.data.imageUrl;
+        }
 
-      const stepImageUrls = await Promise.all(
-        stepImageFiles.map(async (file, index) => {
-          if (!file) return currentStepImages[index] || null;
-          const formData = new FormData();
-          formData.append('file', file);
-          const response = await axios.post(`${API_BASE_URL}/api/uploads/recipestep`, formData);
-          return response.data.imageUrl;
-        })
-      );
+        const stepImageUrls = await Promise.all(
+            stepImageFiles.map(async (file, index) => {
+                if (!file) return currentStepImages[index] || null;
+                const formData = new FormData();
+                formData.append('file', file);
+                const response = await axios.post(`${API_BASE_URL}/api/uploads/recipestep`, formData);
+                return response.data.imageUrl;
+            })
+        );
 
-      const data = {
-        title,
-        description,
-        servings: parseInt(servings, 10),
-        cookingTime: parseInt(cookingTime, 10),
-        prepTime: parseInt(prepTime, 10),
-        cuisine,
-        image_url: imageUrl,
-        ingredients: ingredients.map(ingredient => ({
-          name: ingredient.name,
-          quantity: ingredient.quantity,
-        })),
-        instructions: instructions.map((instruction, index) => ({
-          step: instruction.step,
-          image: stepImageUrls[index] || instruction.image,
-        })),
-      };
+        const data = {
+            title,
+            description,
+            servings: parseInt(servings, 10),
+            cookingTime: parseInt(cookingTime, 10),
+            prepTime: parseInt(prepTime, 10),
+            cuisine,
+            image_url: imageUrl,
+            ingredients: ingredients.map(ingredient => ({
+                name: ingredient.name,
+                quantity: ingredient.quantity,
+            })),
+            instructions: instructions.map((instruction, index) => ({
+                step: instruction.step,
+                image: stepImageUrls[index] || instruction.image,
+            })),
+        };
 
-      await axios.put(`${API_BASE_URL}/api/edit-recipe/${recipeId}`, data);
-      setSuccessMessage('Recipe updated successfully!');
-      setTimeout(() => navigate(`/recipes/${recipeId}`), 2000);
+        await axios.put(`${API_BASE_URL}/api/edit-recipe/${recipeId}`, data);
+        setSuccessMessage('Recipe updated successfully!');
+        
+        setTimeout(() => {
+            navigate(-1); // Navigate back one page for both user and admin
+        }, 2000);
     } catch (error) {
-      setError('Error updating recipe. Please try again.');
+        setError('Error updating recipe. Please try again.');
     } finally {
-      setLoadingImage(false);
-      setIsSubmitting(false);
+        setLoadingImage(false);
+        setIsSubmitting(false);
     }
   };
 
@@ -162,15 +165,20 @@ function EditRecipe() {
         try {
             setIsSubmitting(true);
             setLoadingImage(true);
-            await axios.delete(`${API_BASE_URL}/api/edit-recipe/${recipeId}`);
-            setSuccessMessage('Recipe deleted successfully!');
             
             // Check if we're in admin route
             const isAdminRoute = window.location.pathname.includes('/admin/');
             
+            await axios.delete(`${API_BASE_URL}/api/edit-recipe/${recipeId}`, {
+                params: { source: isAdminRoute ? 'admin' : 'user' }
+            });
+            
+            setSuccessMessage('Recipe deleted successfully!');
+            
             setTimeout(() => {
                 if (isAdminRoute) {
                     navigate(-2); // Go back two pages if in admin route
+                    window.history.go(-2); // Force a double back navigation
                 } else {
                     navigate(-1); // Go back one page if in normal route
                 }
