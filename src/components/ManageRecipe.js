@@ -95,9 +95,10 @@ const ManageRecipe = () => {
             try {
                 const token = localStorage.getItem('token');
                 await axios.delete(`${API_BASE_URL}/api/admin/recipes/${recipeId}`, {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: { Authorization: `Bearer ${token}` },
+                    params: { source: 'admin' }
                 });
-                navigate('/admin/recipes');
+                navigate(-1);
             } catch (err) {
                 setError('Error deleting recipe');
             }

@@ -159,21 +159,29 @@ function EditRecipe() {
     if (isSubmitting) return;
     
     if (window.confirm('Are you sure you want to delete this recipe? This action cannot be undone.')) {
-      try {
-        setIsSubmitting(true);
-        setLoadingImage(true);
-        await axios.delete(`${API_BASE_URL}/api/edit-recipe/${recipeId}`);
-        setSuccessMessage('Recipe deleted successfully!');
-        setTimeout(() => {
-          navigate('/myrecipes');
-        }, 1500);
-      } catch (error) {
-        console.error('Delete error:', error);
-        setError('Error deleting recipe. Please try again.');
-      } finally {
-        setLoadingImage(false);
-        setIsSubmitting(false);
-      }
+        try {
+            setIsSubmitting(true);
+            setLoadingImage(true);
+            await axios.delete(`${API_BASE_URL}/api/edit-recipe/${recipeId}`);
+            setSuccessMessage('Recipe deleted successfully!');
+            
+            // Check if we're in admin route
+            const isAdminRoute = window.location.pathname.includes('/admin/');
+            
+            setTimeout(() => {
+                if (isAdminRoute) {
+                    navigate(-2); // Go back two pages if in admin route
+                } else {
+                    navigate(-1); // Go back one page if in normal route
+                }
+            }, 1500);
+        } catch (error) {
+            console.error('Delete error:', error);
+            setError('Error deleting recipe. Please try again.');
+        } finally {
+            setLoadingImage(false);
+            setIsSubmitting(false);
+        }
     }
   };
 

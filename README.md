@@ -17,12 +17,24 @@ A React-based frontend for the ERecipeHub recipe sharing platform.
   - Rate Recipes
   - Comment on Recipes
   - Favorite Recipes
+  - Report Inappropriate Content
 - Recipe Discovery
   - Search Recipes
   - Filter by Cuisine
   - Sort by Various Criteria
   - View Latest Recipes
   - View Top-Rated Recipes
+- Admin Dashboard
+  - User Management Overview
+  - Recipe Management
+  - Report Management
+  - Activity Statistics
+  - Content Moderation
+- Content Reporting System
+  - Report Recipes
+  - Report Comments
+  - Report Status Tracking
+  - Admin Review Interface
 - Responsive Design
   - Mobile-Friendly Interface
   - Adaptive Layout
@@ -34,6 +46,7 @@ A React-based frontend for the ERecipeHub recipe sharing platform.
 - **Axios** - HTTP Client
 - **React Icons** - Icon Components
 - **Font Awesome** - Icon Library
+- **React Draggable** - Draggable Components
 - **CSS3** - Styling
 
 ## Project Structure
@@ -54,7 +67,13 @@ frontend/
 │   │   ├── Profile.js
 │   │   ├── RecipeDetail.js
 │   │   ├── Recipes.js
-│   │   └── Signup.js
+│   │   ├── Signup.js
+│   │   ├── AdminDashboard.js
+│   │   ├── AdminHeader.js
+│   │   ├── UserOverview.js
+│   │   ├── RecipeOverview.js
+│   │   ├── ManageRecipe.js
+│   │   └── ManageReports.js
 │   ├── App.js
 │   └── index.js
 ├── .env.development
@@ -112,24 +131,6 @@ npm install
 npm start
 ```
 
-## Deployment
-
-The application is configured for deployment on Render:
-
-1. Build Configuration:
-```yaml
-services:
-  - type: web
-    name: erecipehub
-    env: static
-    buildCommand: npm run build
-    staticPublishPath: ./build
-```
-
-2. Routing Configuration:
-- `static.json` for static file serving
-- `_redirects` for client-side routing support
-
 ## Dependencies
 
 - "@fortawesome/fontawesome-svg-core": "^6.6.0"
@@ -142,10 +143,37 @@ services:
 - "axios": "^1.7.7"
 - "react": "^18.3.1"
 - "react-dom": "^18.3.1"
-- "react-icons": "^5.3.0"
+- "react-draggable": "^4.4.6"
+- "react-icons": "^5.0.1"
 - "react-router-dom": "^6.28.0"
 - "react-scripts": "^5.0.1"
 - "web-vitals": "^2.1.4"
+
+## Admin Features
+
+### Dashboard
+- Overview of site statistics
+- Recent activity monitoring
+- User growth tracking
+- Popular content analysis
+
+### User Management
+- User statistics overview
+- Activity monitoring
+- Role management
+- User listing and details
+
+### Recipe Management
+- Recipe moderation
+- Content editing
+- Recipe deletion
+- Statistics tracking
+
+### Report Management
+- Content report review
+- Report status updates
+- Draggable report details window
+- Quick access to reported content
 
 ## Browser Support
 
