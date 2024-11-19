@@ -46,124 +46,130 @@ const RecipeOverview = () => {
     };
 
     if (loading) return (
-        <div className="recipe-overview">
+        <div className="admin-recipe-overview">
             <AdminHeader />
-            <div className="recipe-overview-container">
+            <div className="admin-recipe-container">
                 <div>Loading...</div>
             </div>
         </div>
     );
 
     if (error) return (
-        <div className="recipe-overview">
+        <div className="admin-recipe-overview">
             <AdminHeader />
-            <div className="recipe-overview-container">
+            <div className="admin-recipe-container">
                 <div className="error-message">{error}</div>
             </div>
         </div>
     );
 
     return (
-        <div className="recipe-overview">
+        <div className="admin-recipe-overview">
             <AdminHeader />
-            <div className="recipe-overview-container">
+            <div className="admin-recipe-container">
                 <h1>Recipe Overview</h1>
 
-                <div className="recipes-controls">
-                    <div className="search-box">
-                        <FaSearch className="search-icon" />
+                <div className="admin-recipes-controls">
+                    <div className="admin-search-box">
+                        <FaSearch className="admin-search-icon" />
                         <input
                             type="text"
                             placeholder="Search recipes..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="search-input"
+                            className="admin-search-input"
                         />
                     </div>
 
-                    <div className="filter-controls">
-                        <div className="sort-box">
-                            <select
-                                value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value)}
-                                className="sort-select"
-                            >
-                                <option value="latest">Latest</option>
-                                <option value="oldest">Oldest</option>
-                                <option value="rating">Highest Rated</option>
-                            </select>
-                        </div>
+                    <div className="admin-filter-controls">
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value)}
+                            className="admin-sort-select"
+                        >
+                            <option value="latest">Latest</option>
+                            <option value="oldest">Oldest</option>
+                            <option value="rating">Highest Rated</option>
+                        </select>
 
-                        <div className="cuisine-box">
-                            <select
-                                value={cuisine}
-                                onChange={(e) => setCuisine(e.target.value)}
-                                className="cuisine-select"
-                            >
-                                <option value="All">All Cuisines</option>
-                                <option value="Italian">Italian</option>
-                                <option value="Chinese">Chinese</option>
-                                <option value="Mexican">Mexican</option>
-                                <option value="Japanese">Japanese</option>
-                                <option value="Indian">Indian</option>
-                                <option value="Thai">Thai</option>
-                                <option value="French">French</option>
-                                <option value="Mediterranean">Mediterranean</option>
-                                <option value="American">American</option>
-                                <option value="Korean">Korean</option>
-                            </select>
-                        </div>
+                        <select
+                            value={cuisine}
+                            onChange={(e) => setCuisine(e.target.value)}
+                            className="admin-cuisine-select"
+                        >
+                            <option value="All">All Cuisines</option>
+                            <option value="Italian">Italian</option>
+                            <option value="Chinese">Chinese</option>
+                            <option value="Mexican">Mexican</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="Indian">Indian</option>
+                            <option value="Thai">Thai</option>
+                            <option value="French">French</option>
+                            <option value="Mediterranean">Mediterranean</option>
+                            <option value="American">American</option>
+                            <option value="Korean">Korean</option>
+                        </select>
                     </div>
                 </div>
 
-                <div className="recipe-grid">
+                <div className="admin-recipe-grid">
                     {recipes.map((recipe) => (
-                        <div key={recipe._id} className="recipe-card">
-                            <div className="recipe-image-container">
+                        <div key={recipe._id} className="admin-recipe-card">
+                            <div className="admin-recipe-image-container">
                                 <img
                                     src={recipe.image_url.startsWith('http') 
                                         ? recipe.image_url 
                                         : `${API_BASE_URL}${recipe.image_url}`}
                                     alt={recipe.title}
-                                    className="recipe-image"
+                                    className="admin-recipe-image"
                                 />
+                                <div className="admin-recipe-overlay">
+                                    <Link 
+                                        to={`/recipes/${recipe._id}`} 
+                                        className="admin-view-recipe-link"
+                                    >
+                                        View Recipe
+                                    </Link>
+                                    <Link 
+                                        to={`/admin/recipes/${recipe._id}/manage`} 
+                                        className="admin-manage-recipe-link"
+                                    >
+                                        Manage Recipe
+                                    </Link>
+                                </div>
                             </div>
-                            <h3>{recipe.title}</h3>
-                            <p className="recipe-description">{recipe.description}</p>
-                            <div className="recipe-info">
-                                <span>
-                                    <FaHourglassHalf className="icon" />
-                                    {recipe.prep_time}m prep
-                                </span>
-                                <span>
-                                    <FaClock className="icon" />
-                                    {recipe.cooking_time}m cook
-                                </span>
-                                <span>
-                                    <FaUtensils className="icon" />
-                                    {recipe.servings} servings
-                                </span>
+                            <div className="admin-recipe-content">
+                                <h3>{recipe.title}</h3>
+                                <p className="admin-recipe-description">{recipe.description}</p>
+                                <div className="admin-recipe-info">
+                                    <span>
+                                        <FaHourglassHalf className="icon" />
+                                        {recipe.prep_time}m prep
+                                    </span>
+                                    <span>
+                                        <FaClock className="icon" />
+                                        {recipe.cooking_time}m cook
+                                    </span>
+                                    <span>
+                                        <FaUtensils className="icon" />
+                                        {recipe.servings} servings
+                                    </span>
+                                </div>
+                                <div className="recipe-stats">
+                                    <span>
+                                        <FaStar className="icon" />
+                                        {recipe.averageRating.toFixed(1)} ({recipe.totalRatings})
+                                    </span>
+                                    <span>
+                                        <FaComment className="icon" />
+                                        {recipe.totalComments} comments
+                                    </span>
+                                </div>
+                                <div className="recipe-meta">
+                                    <span>By {recipe.author.username}</span>
+                                    <span>{new Date(recipe.created_at).toLocaleDateString()}</span>
+                                </div>
                             </div>
-                            <div className="recipe-stats">
-                                <span>
-                                    <FaStar className="icon" />
-                                    {recipe.averageRating.toFixed(1)} ({recipe.totalRatings})
-                                </span>
-                                <span>
-                                    <FaComment className="icon" />
-                                    {recipe.totalComments} comments
-                                </span>
-                            </div>
-                            <div className="recipe-meta">
-                                <span>By {recipe.author.username}</span>
-                                <span>{new Date(recipe.created_at).toLocaleDateString()}</span>
-                            </div>
-                            <Link 
-                                to={`/admin/recipes/${recipe._id}/manage`} 
-                                className="view-recipe-link"
-                            >
-                                Manage Recipe
-                            </Link>
                         </div>
                     ))}
                 </div>

@@ -15,6 +15,7 @@ import AdminDashboard from './components/AdminDashboard';
 import UserOverview from './components/UserOverview';
 import RecipeOverview from './components/RecipeOverview';
 import ManageRecipe from './components/ManageRecipe';
+import ManageReports from './components/ManageReports';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -126,6 +127,14 @@ function App() {
           element={
             <AdminProtectedRoute>
               <EditRecipe />
+            </AdminProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/reports" 
+          element={
+            <AdminProtectedRoute>
+              <ManageReports />
             </AdminProtectedRoute>
           } 
         />

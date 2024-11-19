@@ -22,6 +22,7 @@ const AdminHeader = () => {
         <Link to="/admin/dashboard">Dashboard</Link>
         <Link to="/admin/users">User Overview</Link>
         <Link to="/admin/recipes">Recipe Overview</Link>
+        <Link to="/admin/reports">Reports</Link>
         <div className="admin-profile">
           <span>Welcome, {username}</span>
           <button onClick={handleLogout} className="logout-btn">Logout</button>

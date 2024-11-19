@@ -166,7 +166,7 @@ const Home = () => {
   };
 
   const getVisibleRecipes = (recipeList, startIndex) => {
-    return recipeList.slice(startIndex, startIndex + 4);
+    return recipeList.slice(startIndex, startIndex + 3);
   };
 
   const handleNavigation = (direction, section) => {
@@ -182,13 +182,13 @@ const Home = () => {
       setTimeout(() => {
         if (section === 'latest') {
           setCurrentLatestIndex(prev => {
-            const newIndex = direction === 'next' ? prev + 4 : prev - 4;
-            return Math.max(0, Math.min(newIndex, recipes.latestRecipes.length - 4));
+            const newIndex = direction === 'next' ? prev + 3 : prev - 3;
+            return Math.max(0, Math.min(newIndex, recipes.latestRecipes.length - 3));
           });
         } else {
           setCurrentTopRatedIndex(prev => {
-            const newIndex = direction === 'next' ? prev + 4 : prev - 4;
-            return Math.max(0, Math.min(newIndex, recipes.topRatedRecipes.length - 4));
+            const newIndex = direction === 'next' ? prev + 3 : prev - 3;
+            return Math.max(0, Math.min(newIndex, recipes.topRatedRecipes.length - 3));
           });
         }
         
@@ -249,7 +249,7 @@ const Home = () => {
             <NavigationButton 
               direction="next"
               onClick={() => handleNavigation('next', 'latest')}
-              disabled={currentLatestIndex >= recipes.latestRecipes.length - 4}
+              disabled={currentLatestIndex >= recipes.latestRecipes.length - 3}
             />
           </div>
         </section>
@@ -275,7 +275,7 @@ const Home = () => {
             <NavigationButton 
               direction="next"
               onClick={() => handleNavigation('next', 'rated')}
-              disabled={currentTopRatedIndex >= recipes.topRatedRecipes.length - 4}
+              disabled={currentTopRatedIndex >= recipes.topRatedRecipes.length - 3}
             />
           </div>
         </section>
