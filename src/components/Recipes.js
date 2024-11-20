@@ -31,10 +31,14 @@ const Recipes = () => {
 
       let response;
       if (showFavorites && userId) {
-        // Fetch favorite recipes
-        response = await axios.get(`${API_BASE_URL}/api/favorites/user/${userId}`);
-        // Transform the response to match the regular recipes format
-        setRecipes(response.data.map(fav => fav.recipe_id));
+        // Fetch favorite recipes with full recipe details
+        response = await axios.get(`${API_BASE_URL}/api/recipes`, {
+          params: {
+            userId: userId,
+            favorites: 'true'
+          }
+        });
+        setRecipes(response.data || []);
       } else {
         // Fetch regular recipes with filters
         response = await axios.get(`${API_BASE_URL}/api/recipes`, {
@@ -94,6 +98,11 @@ const Recipes = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+      // Don't do anything if recipe is invalid
+      if (!recipe || !recipe._id) {
+        return;
+      }
+
       const checkFavoriteStatus = async () => {
         try {
           const userId = localStorage.getItem('userId');
@@ -110,7 +119,12 @@ const Recipes = () => {
       };
 
       checkFavoriteStatus();
-    }, [recipe._id]);
+    }, [recipe?._id]); // Use optional chaining here
+
+    // Move null check here, after all hooks
+    if (!recipe || !recipe._id) {
+      return null;
+    }
 
     const handleFavoriteClick = async (e) => {
       e.preventDefault(); // Prevent navigation
