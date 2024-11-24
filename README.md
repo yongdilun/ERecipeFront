@@ -112,8 +112,7 @@ REACT_APP_API_URL=https://erecipehubback.onrender.com
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/ERecipeHub.git
-cd ERecipeHub/frontend
+git clone https://github.com/yongdilun/ERecipeFront.git
 ```
 
 2. Install dependencies:
@@ -133,21 +132,22 @@ npm start
 
 ## Dependencies
 
-- "@fortawesome/fontawesome-svg-core": "^6.6.0"
-- "@fortawesome/free-regular-svg-icons": "^6.6.0"
-- "@fortawesome/free-solid-svg-icons": "^6.6.0"
-- "@fortawesome/react-fontawesome": "^0.2.2"
-- "@testing-library/jest-dom": "^5.17.0"
-- "@testing-library/react": "^13.4.0"
-- "@testing-library/user-event": "^13.5.0"
-- "axios": "^1.7.7"
-- "react": "^18.3.1"
-- "react-dom": "^18.3.1"
-- "react-draggable": "^4.4.6"
-- "react-icons": "^5.0.1"
-- "react-router-dom": "^6.28.0"
-- "react-scripts": "^5.0.1"
-- "web-vitals": "^2.1.4"
+- **@fortawesome/fontawesome-svg-core**: Core library for Font Awesome, used to manage icons in SVG format.
+- **@fortawesome/free-regular-svg-icons**: Collection of free regular-style icons from Font Awesome.
+- **@fortawesome/free-solid-svg-icons**: Collection of free solid-style icons from Font Awesome.
+- **@fortawesome/react-fontawesome**: React wrapper for Font Awesome, enabling easy integration of Font Awesome icons in React projects.
+- **@testing-library/jest-dom**: Custom Jest matchers for testing DOM elements more effectively.
+- **@testing-library/react**: Testing utilities for React components, helping simulate user interactions.
+- **@testing-library/user-event**: Simulates complex user interactions like typing or clicking during tests.
+- **axios**: Promise-based HTTP client for making API requests in JavaScript and React.
+- **react**: Core library for building user interfaces with components.
+- **react-dom**: React package for working with the DOM, enabling rendering of React components to web pages.
+- **react-draggable**: Provides functionality for making elements draggable within React applications.
+- **react-icons**: Library of popular icon sets for React, offering lightweight SVG-based icons.
+- **react-router-dom**: Declarative routing library for handling navigation in React applications.
+- **react-scripts**: Configuration and scripts for building React applications (used in Create React App projects).
+- **web-vitals**: Utility for measuring essential web performance metrics like loading, interactivity, and visual stability.
+
 
 ## Admin Features
 
